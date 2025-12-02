@@ -1,0 +1,33 @@
+
+# Terraform cache
+.terraform/
+infra/api/.terraform/
+
+# Ignore secret files
+*.env
+*.env.local
+*.tfstate
+*.tfstate.backup
+.terraform/
+infra/api/.terraform/
+# Terraform
+infra/.terraform/
+infra/.terraform.lock.hcl
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
+infra/variables.tf
+infra/outputs.tf
+infra/main.tf
+infra/infra
+
+# Env files
+.env
+frontend/.env
+frontend/.env.local
+
+# Terraform stuff – do NOT commit
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.*
+
