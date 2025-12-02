@@ -18,7 +18,11 @@ This project demonstrates hands-on skills across:
 🚀 Production deployment on S3 + CloudFront
 
 🚀 Live Demo
-Frontend (CloudFront)
+
+- 🌍 **Production (CloudFront)**: https://dze6j0so6waj5.cloudfront.net
+
+[![Live - CloudFront](https://img.shields.io/badge/FootyIQ-Live%20Demo-success)](https://dze6j0so6waj5.cloudfront.net)
+
 
 https://d2vtfxd9w08enj.cloudfront.net
 
