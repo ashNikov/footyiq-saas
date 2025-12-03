@@ -17,8 +17,11 @@ interface PredictionResponse {
 }
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  const matchId = event.queryStringParameters?.matchId ?? "rm-barca";
-  const risk = (event.queryStringParameters?.risk as RiskProfile) ?? "balanced";
+  const matchId =
+    event.queryStringParameters?.matchId?.toLowerCase() ?? "rm-barca";
+  const risk: RiskProfile =
+    (event.queryStringParameters?.risk as RiskProfile | undefined) ??
+    "balanced";
 
   const edgeMap: Record<RiskProfile, number> = {
     safe: 52,
@@ -32,20 +35,31 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     aggressive: "low",
   };
 
+  const marketMap: Record<RiskProfile, string> = {
+    safe: "Double Chance - Home/Draw",
+    balanced: "Over 2.5 Goals",
+    aggressive: "Both Teams To Score & Over 2.5",
+  };
+
+  const edgePercent = edgeMap[risk];
+  const confidence = confidenceMap[risk];
+  const market = marketMap[risk];
+
   const response: PredictionResponse = {
     matchId,
     risk,
     edge: {
-      edgePercent: edgeMap[risk],
-      confidence: confidenceMap[risk],
-      market: "Over 2.5 goals",
+      edgePercent,
+      confidence,
+      market,
     },
     explanation: {
-      summary: `La Liga: Over 2.5 goals shows a ${edgeMap[risk]}% modelled edge (${confidenceMap[risk]} confidence).`,
+      summary: `Model favours ${market} with a ${edgePercent}% edge at a ${confidence} confidence level.`,
       bullets: [
-        `Match: ${matchId} in La Liga.`,
-        "Using a balanced risk profile to blend upside and volatility.",
-        "Real FootyIQ engine will later combine form, xG, injuries and live odds.",
+        `Match: ${matchId}`,
+        `Risk profile: ${risk}`,
+        `Suggested market: ${market}`,
+        `Projected edge: ${edgePercent}% (${confidence} confidence)`,
       ],
     },
   };
@@ -53,11 +67,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   return {
     statusCode: 200,
     headers: {
-      "Content-Type": "application/json",
-      // 👉 CORS so browser can call from http://localhost:5173
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "*",
-      "Access-Control-Allow-Methods": "GET,OPTIONS",
+      "content-type": "application/json",
     },
     body: JSON.stringify(response),
   };
