@@ -1,10 +1,20 @@
+name: deploy-backend
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch:
+
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
 
     env:
       AWS_REGION_LAMBDA: eu-west-1
-      LAMBDA_FUNCTION_NAME: footyiq-backend  # exact Lambda name in eu-west-1
+      LAMBDA_FUNCTION_NAME: footyiq-backend  # exact Lambda name
 
     steps:
       - name: Checkout repo
