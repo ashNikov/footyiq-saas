@@ -24,15 +24,15 @@ jobs:
       - name: Install dependencies & build backend
         working-directory: backend
         run: |
-          npm ci --omit=dev
+          npm ci
           npm run build
 
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials (eu-west-1 for Lambda)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{  eu-west-1 }} 
+          aws-region: eu-west-1
 
       - name: Package Lambda artifact
         working-directory: backend
