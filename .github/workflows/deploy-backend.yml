@@ -2,7 +2,8 @@ name: deploy-backend
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
     paths:
       - "backend/**"
       - ".github/workflows/deploy-backend.yml"
@@ -36,12 +37,12 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-1
+          aws-region: ${{ env.AWS_REGION_LAMBDA }}
 
       - name: Package Lambda artifact
         run: |
           cd backend
-          zip -r ../lambda.zip .
+          zip -r ../lambda.zip dist node_modules package.json
 
       - name: Deploy Lambda function
         run: |
