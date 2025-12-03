@@ -12,9 +12,15 @@ jobs:
   deploy-backend:
     runs-on: ubuntu-latest
 
+    env:
+      AWS_REGION_LAMBDA: eu-west-1
+      LAMBDA_FUNCTION_NAME: footyiq-backend
+
     steps:
-      - name: Checkout repo
+      - name: Set up job
         uses: actions/checkout@v4
+      ...
+
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -39,9 +45,11 @@ jobs:
         run: |
           zip -r ../lambda.zip .
 
-      - name: Deploy Lambda function
-        run: |
-          aws lambda update-function-code \
-            --function-name "${{ secrets.LAMBDA_FUNCTION_NAME }}" \
-            --zip-file fileb://lambda.zip
+          - name: Deploy Lambda function
+      run: |
+        aws lambda update-function-code \
+          --function-name "$LAMBDA_FUNCTION_NAME" \
+          --zip-file fileb://backend/dist/lambda.zip \
+          --region "$AWS_REGION_LAMBDA"
+
 
