@@ -1,3 +1,5 @@
+import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
+
 type RiskProfile = "safe" | "balanced" | "aggressive";
 
 interface PredictionResponse {
@@ -14,9 +16,10 @@ interface PredictionResponse {
   };
 }
 
-export const handler = async (event: any) => {
+export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   const matchId =
     event.queryStringParameters?.matchId?.toLowerCase() ?? "rm-barca";
+
   const risk: RiskProfile =
     (event.queryStringParameters?.risk as RiskProfile | undefined) ??
     "balanced";
