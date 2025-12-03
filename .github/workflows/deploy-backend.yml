@@ -1,26 +1,14 @@
-name: Deploy FootyIQ Backend
-
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - "backend/**"
-      - ".github/workflows/deploy-backend.yml"
-
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
 
     env:
       AWS_REGION_LAMBDA: eu-west-1
-      LAMBDA_FUNCTION_NAME: footyiq-backend
+      LAMBDA_FUNCTION_NAME: footyiq-backend  # exact Lambda name in eu-west-1
 
     steps:
-      - name: Set up job
+      - name: Checkout repo
         uses: actions/checkout@v4
-      ...
-
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -38,18 +26,17 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: eu-west-1
 
       - name: Package Lambda artifact
-        working-directory: backend
         run: |
+          cd backend
           zip -r ../lambda.zip .
 
-          - name: Deploy Lambda function
-      run: |
-        aws lambda update-function-code \
-          --function-name "$LAMBDA_FUNCTION_NAME" \
-          --zip-file fileb://backend/dist/lambda.zip \
-          --region "$AWS_REGION_LAMBDA"
-
+      - name: Deploy Lambda function
+        run: |
+          aws lambda update-function-code \
+            --function-name "$LAMBDA_FUNCTION_NAME" \
+            --zip-file fileb://lambda.zip \
+            --region "$AWS_REGION_LAMBDA"
 
