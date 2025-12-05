@@ -68,15 +68,16 @@ It combines a production-ready frontend, a serverless backend, and fully automat
 ---
 
 ## 🏗️ Architecture Diagram (Mermaid)
-
 ```mermaid
 graph TD
-    A[User / Browser] -->|HTTPS| B[CloudFront CDN]
-    B --> C[S3 Static Website (Frontend)]
-    B -->|API Request| D[API Gateway]
-    D --> E[AWS Lambda Function]
-    E --> F[(Prediction Engine Logic)]
+    A["User / Browser"] -->|HTTPS| B["CloudFront CDN"]
+    B --> C["S3 Static Website (Frontend)"]
+    B -->|API Request| D["API Gateway"]
+    D --> E["AWS Lambda Function"]
+    E --> F["Prediction Engine Logic"]
     F -->|JSON Response| A
+```
+
 📡 API Contract
 Example Request
 
