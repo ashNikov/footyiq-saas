@@ -52,7 +52,36 @@ It combines a production-ready frontend, a serverless backend, and fully automat
 - CORS enabled for frontend  
 
 ---
+---
 
+## 🔐 Security Boundaries & Trust Zones (FootyIQ)
+
+This diagram illustrates **security boundaries, trust zones, and access controls** across the FootyIQ platform.
+
+```mermaid
+graph TD
+    U["User / Browser"] -->|HTTPS| CF["CloudFront CDN"]
+
+    CF --> FE["S3 Static Frontend"]
+
+    FE -->|CORS-restricted API calls| AG["API Gateway"]
+
+    AG --> L["AWS Lambda Function"]
+
+    subgraph Public Zone
+        U
+        CF
+    end
+
+    subgraph Edge / CDN Zone
+        FE
+    end
+
+    subgraph Serverless Application Zone
+        AG
+        L
+    end
+```
 ## ☁️ Infrastructure (Implemented)
 
 - AWS S3 (static hosting)  
@@ -66,18 +95,53 @@ It combines a production-ready frontend, a serverless backend, and fully automat
   - Future IaC expansion  
 
 ---
+---
 
-## 🏗️ Architecture Diagram (Mermaid)
+## 🏗️ High-Level Cloud Architecture (FootyIQ – Production)
+
+This diagram represents the **production cloud architecture** used by FootyIQ on AWS.
+
 ```mermaid
 graph TD
-    A["User / Browser"] -->|HTTPS| B["CloudFront CDN"]
-    B --> C["S3 Static Website (Frontend)"]
-    B -->|API Request| D["API Gateway"]
-    D --> E["AWS Lambda Function"]
-    E --> F["Prediction Engine Logic"]
-    F -->|JSON Response| A
-```
+    U["User / Browser"] -->|HTTPS| CF["CloudFront CDN"]
 
+    CF --> FE["S3 Static Frontend"]
+    CF -->|API Requests| AG["API Gateway"]
+
+    AG --> L["AWS Lambda (Prediction Engine)"]
+
+    L -->|JSON Response| U
+```
+---
+
+## 🔐 Security Boundaries & Trust Zones (FootyIQ)
+
+This diagram illustrates **trust boundaries and access controls** across FootyIQ’s serverless platform.
+
+```mermaid
+graph TD
+    U["User / Browser"] -->|HTTPS| CF["CloudFront CDN"]
+
+    CF --> FE["S3 Static Frontend"]
+
+    FE -->|CORS-restricted API calls| AG["API Gateway"]
+
+    AG --> L["AWS Lambda (Prediction Engine)"]
+
+    subgraph Public Zone
+        U
+        CF
+    end
+
+    subgraph Edge / CDN Zone
+        FE
+    end
+
+    subgraph Serverless Application Zone
+        AG
+        L
+    end
+```
 📡 API Contract
 Example Request
 
